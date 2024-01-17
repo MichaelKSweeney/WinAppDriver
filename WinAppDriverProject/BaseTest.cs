@@ -24,6 +24,8 @@ namespace WinAppDriverProject
             //fix this at some point
             Thread.Sleep(5000); // if app hasnt fully booted when driver tries to initialise then it shits itself
 
+
+            //this logic i think is dumb, i think booting from a path can be done via appCapabilities but it was being awkward for me
             IntPtr appTopLevelWindowHandle = new IntPtr();
             foreach (Process clsProcess in Process.GetProcesses())
             {
