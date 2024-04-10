@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using AventStack.ExtentReports;
+using NUnit.Framework;
 using System.Diagnostics;
 
 namespace WinAppDriverProject
@@ -14,6 +15,7 @@ namespace WinAppDriverProject
         [SetUp]
         public void TestSetup()
         {
+            
             Process.GetProcesses().Where(process => process.ProcessName == "CalculatorApp" ).ToList().ForEach(process => process.Kill());
             if (bootViaPath)
             {
@@ -23,7 +25,7 @@ namespace WinAppDriverProject
             {
                 CreateDriverFromAppId(CalculatorAppId);
             }
-
+            ExtentReporter.StartExtentTest(TestContext.CurrentContext.Test.Name, driver);
             report = new Reporter(driver, Guid.NewGuid());
             report.InitialiseReport();
             report.Log("Booting Calculator");
@@ -38,9 +40,8 @@ namespace WinAppDriverProject
         [TearDown]
         public void TearDown() 
         {
-            report.Log("Closing Calculator");
             driver.CloseApp();
-            report.FinaliseReport();
+            ExtentReporter.Flush();
         }
 
         [Test]
@@ -49,26 +50,29 @@ namespace WinAppDriverProject
             
             try
             {
-                report.LogStep("Step 1");
+                
+                ExtentReporter.Message("Step 1");
                 CalculatorSteps.ClickNine();
+                ExtentReporter.MessageAndScreenshot("Clicked Nine");
 
-                report.LogStep("Step 2");
+                ExtentReporter.Message("Step 2");
                 CalculatorSteps.ClickPlus();
+                ExtentReporter.MessageAndScreenshot("Clicked Plus");
 
-                report.LogStep("Step 3");
+                ExtentReporter.Message("Step 3");
                 CalculatorSteps.ClickOne();
+                ExtentReporter.MessageAndScreenshot("Clicked One");
 
-                report.LogStep("Step 4");
+                ExtentReporter.Message("Step 4");
                 CalculatorSteps.ClickEquals();
-
-                report.LogAndScreenShot("Equation Result Screenshot");
+                ExtentReporter.MessageAndScreenshot("Clicked Equals");
                 var calculationResult = CalculatorSteps.GetCalculationResultText();
 
                 Assert.That(calculationResult.Replace("Display is ", "") == "10");
+                
             }
             catch (Exception e)
             {
-                report.FailAndScreenShot("Test Failed - " + e.Message);
                 Assert.Fail("Test Failed - " + e.Message);
             }
         }
@@ -78,26 +82,28 @@ namespace WinAppDriverProject
         {
             try
             {
-                report.LogStep("Step 1");
+                ExtentReporter.Message("Step 1");
                 CalculatorSteps.ClickNine();
+                ExtentReporter.MessageAndScreenshot("Clicked Nine");
 
-                report.LogStep("Step 2");
+                ExtentReporter.Message("Step 2");
                 CalculatorSteps.ClickMinus();
+                ExtentReporter.MessageAndScreenshot("Clicked Minus");
 
-                report.LogStep("Step 3");
+                ExtentReporter.Message("Step 3");
                 CalculatorSteps.ClickOne();
+                ExtentReporter.MessageAndScreenshot("Clicked One");
 
-                report.LogStep("Step 4");
+                ExtentReporter.Message("Step 4");
                 CalculatorSteps.ClickEquals();
+                ExtentReporter.MessageAndScreenshot("Clicked Equals");
 
-                report.LogAndScreenShot("Equation Result Screenshot");
                 var calculationResult = CalculatorSteps.GetCalculationResultText();
 
                 Assert.That(calculationResult.Replace("Display is ", "") == "8");
             }
             catch (Exception e)
             {
-                report.FailAndScreenShot("Test Failed - " + e.Message);
                 Assert.Fail("Test Failed - " + e.Message);
             }
         }
@@ -108,26 +114,28 @@ namespace WinAppDriverProject
             
             try
             {
-                report.LogStep("Step 1");
+                ExtentReporter.Message("Step 1");
                 CalculatorSteps.ClickNine();
+                ExtentReporter.MessageAndScreenshot("Clicked Nine");
 
-                report.LogStep("Step 2");
+                ExtentReporter.Message("Step 2");
                 CalculatorSteps.ClickMultiply();
+                ExtentReporter.MessageAndScreenshot("Clicked Multiply");
 
-                report.LogStep("Step 3");
+                ExtentReporter.Message("Step 3");
                 CalculatorSteps.ClickTwo();
+                ExtentReporter.MessageAndScreenshot("Clicked Two");
 
-                report.LogStep("Step 4");
+                ExtentReporter.Message("Step 4");
                 CalculatorSteps.ClickEquals();
+                ExtentReporter.MessageAndScreenshot("Clicked Equals");
 
-                report.LogAndScreenShot("Equation Result Screenshot");
                 var calculationResult = CalculatorSteps.GetCalculationResultText();
 
                 Assert.That(calculationResult.Replace("Display is ", "") == "18");
             }
             catch (Exception e)
             {
-                report.FailAndScreenShot("Test Failed - " + e.Message);
                 Assert.Fail("Test Failed - " + e.Message);
             }
         }
@@ -138,26 +146,30 @@ namespace WinAppDriverProject
             
             try
             {
-                report.LogStep("Step 1");
+                ExtentReporter.Message("Step 1");
                 CalculatorSteps.ClickNine();
+                ExtentReporter.MessageAndScreenshot("Clicked Minus");
 
-                report.LogStep("Step 2");
+                ExtentReporter.Message("Step 2");
                 CalculatorSteps.ClickDivide();
+                ExtentReporter.MessageAndScreenshot("Clicked Divide");
 
-                report.LogStep("Step 3");
+                ExtentReporter.Message("Step 3");
                 CalculatorSteps.ClickThree();
+                ExtentReporter.MessageAndScreenshot("Clicked Three");
 
-                report.LogStep("Step 4");
+                ExtentReporter.Message("Step 4");
                 CalculatorSteps.ClickEquals();
+                ExtentReporter.MessageAndScreenshot("Clicked Equals");
 
-                report.LogAndScreenShot("Equation Result Screenshot");
                 var calculationResult = CalculatorSteps.GetCalculationResultText();
 
-                Assert.That(calculationResult.Replace("Display is ", "") == "3");
+                //Assert.That(calculationResult.Replace("Display is ", "") == "3");
+                ExtentReporter.Warning("Result does not equal 3");
+                Assert.That(calculationResult.Replace("Display is ", "") == "4"); // intentional fail to sho
             }
             catch (Exception e)
             {
-                report.FailAndScreenShot("Test Failed - " + e.Message);
                 Assert.Fail("Test Failed - " + e.Message);
             }
         }
@@ -169,22 +181,23 @@ namespace WinAppDriverProject
             
             try
             {
-                report.LogStep("Step 1");
+                ExtentReporter.Message("Step 1");
                 CalculatorSteps.ClickNine();
+                ExtentReporter.MessageAndScreenshot("Clicked Nine");
 
-                report.LogStep("Step 2");
+                ExtentReporter.Message("Step 2");
                 CalculatorSteps.ClickSeven();
+                ExtentReporter.MessageAndScreenshot("Clicked Seven");
 
-                report.LogStep("Step 3");
+                ExtentReporter.Message("Step 3");
                 CalculatorSteps.ClickBackspace();
+                ExtentReporter.MessageAndScreenshot("Clicked Backspace");
 
-                report.LogAndScreenShot("Equation Result Screenshot");
                 var calculationResult = CalculatorSteps.GetCalculationResultText();
                 Assert.That(calculationResult.Replace("Display is ", "") == "9");
             }
             catch (Exception e)
             {
-                report.FailAndScreenShot("Test Failed - " + e.Message);
                 Assert.Fail("Test Failed - " + e.Message);
             }
         }
@@ -195,22 +208,23 @@ namespace WinAppDriverProject
             
             try
             {
-                report.LogStep("Step 1");
+                ExtentReporter.Message("Step 1");
                 CalculatorSteps.ClickNine();
+                ExtentReporter.MessageAndScreenshot("Clicked Nine");
 
-                report.LogStep("Step 2");
+                ExtentReporter.Message("Step 2");
                 CalculatorSteps.ClickOne();
+                ExtentReporter.MessageAndScreenshot("Clicked One");
 
-                report.LogStep("Step 3");
+                ExtentReporter.Message("Step 3");
                 CalculatorSteps.ClickClear();
+                ExtentReporter.MessageAndScreenshot("Clicked Clear");
 
-                report.LogAndScreenShot("Equation Result Screenshot");
                 var calculationResult = CalculatorSteps.GetCalculationResultText();
                 Assert.That(calculationResult.Replace("Display is ", "") == "0");
             }
             catch (Exception e)
             {
-                report.FailAndScreenShot("Test Failed - " + e.Message);
                 Assert.Fail("Test Failed - " + e.Message);
             }
         }
@@ -220,23 +234,24 @@ namespace WinAppDriverProject
         {
             try
             {
-                report.LogStep("Step 1");
+                ExtentReporter.Message("Step 1");
                 CalculatorSteps.ClickTwo();
+                ExtentReporter.MessageAndScreenshot("Clicked Two");
 
-                report.LogStep("Step 2");
+                ExtentReporter.Message("Step 2");
                 CalculatorSteps.ClickOne();
+                ExtentReporter.MessageAndScreenshot("Clicked One");
 
-                report.LogStep("Step 3");
+                ExtentReporter.Message("Step 3");
                 CalculatorSteps.ClickClearEntry();
+                ExtentReporter.MessageAndScreenshot("Clicked Clear Entry");
 
-                report.LogAndScreenShot("Equation Result Screenshot");
                 var calculationResult = CalculatorSteps.GetCalculationResultText();
 
                 Assert.That(calculationResult.Replace("Display is ", "") == "0");
             }
             catch (Exception e)
             {
-                report.FailAndScreenShot("Test Failed - " + e.Message);
                 Assert.Fail("Test Failed - " + e.Message);
             }
         }
@@ -247,33 +262,37 @@ namespace WinAppDriverProject
         {
             try
             {
-                report.LogStep("Step 1");
+                ExtentReporter.Message("Step 1");
                 CalculatorSteps.ClickNavigationTab();
                 CalculatorSteps.ClickScientificCalculator();
+                ExtentReporter.MessageAndScreenshot("Clicked Scientific Calculator");
 
-                report.LogStep("Step 2");
+                ExtentReporter.Message("Step 2");
                 CalculatorSteps.ClickFive();
+                ExtentReporter.MessageAndScreenshot("Clicked Five");
 
-                report.LogStep("Step 3");
+                ExtentReporter.Message("Step 3");
                 CalculatorSteps.ClickExponent();
+                ExtentReporter.MessageAndScreenshot("Clicked Exponent");
 
-                report.LogStep("Step 4");
+                ExtentReporter.Message("Step 4");
                 CalculatorSteps.ClickOne();
+                ExtentReporter.MessageAndScreenshot("Clicked One");
 
-                report.LogStep("Step 5");
+                ExtentReporter.Message("Step 5");
                 CalculatorSteps.ClickZero();
+                ExtentReporter.MessageAndScreenshot("Clicked Zero");
 
-                report.LogStep("Step 6");
+                ExtentReporter.Message("Step 6");
                 CalculatorSteps.ClickEquals();
+                ExtentReporter.MessageAndScreenshot("Clicked Equals");
 
-                report.LogAndScreenShot("Equation Result Screenshot");
                 var calculationResult = CalculatorSteps.GetCalculationResultText();
 
                 Assert.That(calculationResult.Replace("Display is ", "") == "9,765,625");
             }
             catch (Exception e)
             {
-                report.FailAndScreenShot("Test Failed - " + e.Message);
                 Assert.Fail("Test Failed - " + e.Message);
             }
 
